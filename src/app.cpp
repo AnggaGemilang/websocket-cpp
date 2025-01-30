@@ -1,9 +1,7 @@
 #include <uwebsockets/App.h>
 #include <iostream>
 #include <thread>
-#include <mutex>
 #include <unordered_map>
-#include <boost/function.hpp>
 #include <random>
 
 struct PerSocketData {
