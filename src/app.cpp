@@ -1,16 +1,22 @@
 #include <uwebsockets/App.h>
 #include <iostream>
 #include <thread>
-#include <boost/function.hpp>
 #include <random>
 
 struct PerSocketData {
     std::string endpoint_name;
 };
 
+uint16_t generate_random_value() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(1, 65534);
+    return static_cast<uint16_t>(distrib(gen));
+}
+
 class WebSocketServer {
 public:
-    explicit WebSocketServer(const uint16_t &port, const std::string &url) : port_(port), url_(url) {}
+    explicit WebSocketServer(const uint16_t &port, const std::string_view &url) : port_(port), url_(url) {}
 
     bool& get_is_ready_() {
         return this->is_ready_;
@@ -38,7 +44,7 @@ public:
 
                 std::cout << "Connected to " << this->url_ << "\n";
             },
-            .close = [this](auto* ws, int code, [[maybe_unused]] std::string_view message) {
+            .close = [this](auto* ws, int code, std::string_view message) {
                 ws->unsubscribe("broadcast-data");
 
                 std::cout << "Disconnected from " << this->url_ << " (err code: " << code << ") \n";
@@ -81,18 +87,11 @@ private:
     uWS::Loop* loop_;
 };
 
-uint16_t generate_random_value() {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(1, 65534);
-    return static_cast<uint16_t>(distrib(gen));
-}
-
-[[noreturn]] void periodically_broadcast(WebSocketServer* ws, const std::string_view& port) {
+[[noreturn]] void periodically_broadcast(WebSocketServer &ws, const std::string_view& port) {
     while (true) {
-        if (ws->get_is_ready_()) {
-            ws->get_loop_()->defer([&ws, port] () {
-                ws->broadcast_message("broadcast-data", "message from port " + std::string(port) + " (" + std::to_string(generate_random_value()) + ")");
+        if (ws.get_is_ready_()) {
+            ws.get_loop_()->defer([&ws, port] () {
+                ws.broadcast_message("broadcast-data", "message from port " + std::string(port) + " (" + std::to_string(generate_random_value()) + ")");
             });
             std::this_thread::sleep_for(std::chrono::milliseconds(200));            
         }
@@ -902,106 +901,106 @@ int main() {
 
     std::this_thread::sleep_for(std::chrono::milliseconds(250));
 
-    std::thread transmitter_1([&ws]() {periodically_broadcast(&ws, "7000");});
-    std::thread transmitter_2([&ws2]() {periodically_broadcast(&ws2, "7001");});
-    std::thread transmitter_3([&ws3]() {periodically_broadcast(&ws3, "7002");});
-    std::thread transmitter_4([&ws4]() {periodically_broadcast(&ws4, "7003");});
-    std::thread transmitter_5([&ws5]() {periodically_broadcast(&ws5, "7004");});
-    std::thread transmitter_6([&ws6]() {periodically_broadcast(&ws6, "7005");});
-    std::thread transmitter_7([&ws7]() {periodically_broadcast(&ws7, "7006");});
-    std::thread transmitter_8([&ws8]() {periodically_broadcast(&ws8, "7007");});
-    std::thread transmitter_9([&ws9]() {periodically_broadcast(&ws9, "7008");});
-    std::thread transmitter_10([&ws10]() {periodically_broadcast(&ws10, "7009");});
-    std::thread transmitter_11([&ws11]() {periodically_broadcast(&ws11, "7010");});
-    std::thread transmitter_12([&ws12]() {periodically_broadcast(&ws12, "7011");});
-    std::thread transmitter_13([&ws13]() {periodically_broadcast(&ws13, "7012");});
-    std::thread transmitter_14([&ws14]() {periodically_broadcast(&ws14, "7013");});
-    std::thread transmitter_15([&ws15]() {periodically_broadcast(&ws15, "7014");});
-    std::thread transmitter_16([&ws16]() {periodically_broadcast(&ws16, "7015");});
-    std::thread transmitter_17([&ws17]() {periodically_broadcast(&ws17, "7016");});
-    std::thread transmitter_18([&ws18]() {periodically_broadcast(&ws18, "7017");});
-    std::thread transmitter_19([&ws19]() {periodically_broadcast(&ws19, "7018");});
-    std::thread transmitter_20([&ws20]() {periodically_broadcast(&ws20, "7019");});
-    std::thread transmitter_21([&ws21]() {periodically_broadcast(&ws21, "7020");});
-    std::thread transmitter_22([&ws22]() {periodically_broadcast(&ws22, "7021");});
-    std::thread transmitter_23([&ws23]() {periodically_broadcast(&ws23, "7022");});
-    std::thread transmitter_24([&ws24]() {periodically_broadcast(&ws24, "7023");});
-    std::thread transmitter_25([&ws25]() {periodically_broadcast(&ws25, "7024");});
-    std::thread transmitter_26([&ws26]() {periodically_broadcast(&ws26, "7025");});
-    std::thread transmitter_27([&ws27]() {periodically_broadcast(&ws27, "7026");});
-    std::thread transmitter_28([&ws28]() {periodically_broadcast(&ws28, "7027");});
-    std::thread transmitter_29([&ws29]() {periodically_broadcast(&ws29, "7028");});
-    std::thread transmitter_30([&ws30]() {periodically_broadcast(&ws30, "7029");});
-    std::thread transmitter_31([&ws31]() {periodically_broadcast(&ws31, "7030");});
-    std::thread transmitter_32([&ws32]() {periodically_broadcast(&ws32, "7031");});
-    std::thread transmitter_33([&ws33]() {periodically_broadcast(&ws33, "7032");});
-    std::thread transmitter_34([&ws34]() {periodically_broadcast(&ws34, "7033");});
-    std::thread transmitter_35([&ws35]() {periodically_broadcast(&ws35, "7034");});
-    std::thread transmitter_36([&ws36]() {periodically_broadcast(&ws36, "7035");});
-    std::thread transmitter_37([&ws37]() {periodically_broadcast(&ws37, "7036");});
-    std::thread transmitter_38([&ws38]() {periodically_broadcast(&ws38, "7037");});
-    std::thread transmitter_39([&ws39]() {periodically_broadcast(&ws39, "7038");});
-    std::thread transmitter_40([&ws40]() {periodically_broadcast(&ws40, "7039");});
-    std::thread transmitter_41([&ws41]() {periodically_broadcast(&ws41, "7040");});
-    std::thread transmitter_42([&ws42]() {periodically_broadcast(&ws42, "7041");});
-    std::thread transmitter_43([&ws43]() {periodically_broadcast(&ws43, "7042");});
-    std::thread transmitter_44([&ws44]() {periodically_broadcast(&ws44, "7043");});
-    std::thread transmitter_45([&ws45]() {periodically_broadcast(&ws45, "7044");});
-    std::thread transmitter_46([&ws46]() {periodically_broadcast(&ws46, "7045");});
-    std::thread transmitter_47([&ws47]() {periodically_broadcast(&ws47, "7046");});
-    std::thread transmitter_48([&ws48]() {periodically_broadcast(&ws48, "7047");});
-    std::thread transmitter_49([&ws49]() {periodically_broadcast(&ws49, "7048");});
-    std::thread transmitter_50([&ws50]() {periodically_broadcast(&ws50, "7049");});
-    std::thread transmitter_51([&ws51]() {periodically_broadcast(&ws51, "7050");});
-    std::thread transmitter_52([&ws52]() {periodically_broadcast(&ws52, "7051");});
-    std::thread transmitter_53([&ws53]() {periodically_broadcast(&ws53, "7052");});
-    std::thread transmitter_54([&ws54]() {periodically_broadcast(&ws54, "7053");});
-    std::thread transmitter_55([&ws55]() {periodically_broadcast(&ws55, "7054");});
-    std::thread transmitter_56([&ws56]() {periodically_broadcast(&ws56, "7055");});
-    std::thread transmitter_57([&ws57]() {periodically_broadcast(&ws57, "7056");});
-    std::thread transmitter_58([&ws58]() {periodically_broadcast(&ws58, "7057");});
-    std::thread transmitter_59([&ws59]() {periodically_broadcast(&ws59, "7058");});
-    std::thread transmitter_60([&ws60]() {periodically_broadcast(&ws60, "7059");});
-    std::thread transmitter_61([&ws61]() {periodically_broadcast(&ws61, "7060");});
-    std::thread transmitter_62([&ws62]() {periodically_broadcast(&ws62, "7061");});
-    std::thread transmitter_63([&ws63]() {periodically_broadcast(&ws63, "7062");});
-    std::thread transmitter_64([&ws64]() {periodically_broadcast(&ws64, "7063");});
-    std::thread transmitter_65([&ws65]() {periodically_broadcast(&ws65, "7064");});
-    std::thread transmitter_66([&ws66]() {periodically_broadcast(&ws66, "7065");});
-    std::thread transmitter_67([&ws67]() {periodically_broadcast(&ws67, "7066");});
-    std::thread transmitter_68([&ws68]() {periodically_broadcast(&ws68, "7067");});
-    std::thread transmitter_69([&ws69]() {periodically_broadcast(&ws69, "7068");});
-    std::thread transmitter_70([&ws70]() {periodically_broadcast(&ws70, "7069");});
-    std::thread transmitter_71([&ws71]() {periodically_broadcast(&ws71, "7070");});
-    std::thread transmitter_72([&ws72]() {periodically_broadcast(&ws72, "7071");});
-    std::thread transmitter_73([&ws73]() {periodically_broadcast(&ws73, "7072");});
-    std::thread transmitter_74([&ws74]() {periodically_broadcast(&ws74, "7073");});
-    std::thread transmitter_75([&ws75]() {periodically_broadcast(&ws75, "7074");});
-    std::thread transmitter_76([&ws76]() {periodically_broadcast(&ws76, "7075");});
-    std::thread transmitter_77([&ws77]() {periodically_broadcast(&ws77, "7076");});
-    std::thread transmitter_78([&ws78]() {periodically_broadcast(&ws78, "7077");});
-    std::thread transmitter_79([&ws79]() {periodically_broadcast(&ws79, "7078");});
-    std::thread transmitter_80([&ws80]() {periodically_broadcast(&ws80, "7079");});
-    std::thread transmitter_81([&ws81]() {periodically_broadcast(&ws81, "7080");});
-    std::thread transmitter_82([&ws82]() {periodically_broadcast(&ws82, "7081");});
-    std::thread transmitter_83([&ws83]() {periodically_broadcast(&ws83, "7082");});
-    std::thread transmitter_84([&ws84]() {periodically_broadcast(&ws84, "7083");});
-    std::thread transmitter_85([&ws85]() {periodically_broadcast(&ws85, "7084");});
-    std::thread transmitter_86([&ws86]() {periodically_broadcast(&ws86, "7085");});
-    std::thread transmitter_87([&ws87]() {periodically_broadcast(&ws87, "7086");});
-    std::thread transmitter_88([&ws88]() {periodically_broadcast(&ws88, "7087");});
-    std::thread transmitter_89([&ws89]() {periodically_broadcast(&ws89, "7088");});
-    std::thread transmitter_90([&ws90]() {periodically_broadcast(&ws90, "7089");});
-    std::thread transmitter_91([&ws91]() {periodically_broadcast(&ws91, "7090");});
-    std::thread transmitter_92([&ws92]() {periodically_broadcast(&ws92, "7091");});
-    std::thread transmitter_93([&ws93]() {periodically_broadcast(&ws93, "7092");});
-    std::thread transmitter_94([&ws94]() {periodically_broadcast(&ws94, "7093");});
-    std::thread transmitter_95([&ws95]() {periodically_broadcast(&ws95, "7094");});
-    std::thread transmitter_96([&ws96]() {periodically_broadcast(&ws96, "7095");});
-    std::thread transmitter_97([&ws97]() {periodically_broadcast(&ws97, "7096");});
-    std::thread transmitter_98([&ws98]() {periodically_broadcast(&ws98, "7097");});
-    std::thread transmitter_99([&ws99]() {periodically_broadcast(&ws99, "7098");});
-    std::thread transmitter_100([&ws100]() {periodically_broadcast(&ws100, "7099");});
+    std::thread transmitter_1([&ws]() {periodically_broadcast(std::ref(ws), "7000");});
+    std::thread transmitter_2([&ws2]() {periodically_broadcast(std::ref(ws2), "7001");});
+    std::thread transmitter_3([&ws3]() {periodically_broadcast(std::ref(ws3), "7002");});
+    std::thread transmitter_4([&ws4]() {periodically_broadcast(std::ref(ws4), "7003");});
+    std::thread transmitter_5([&ws5]() {periodically_broadcast(std::ref(ws5), "7004");});
+    std::thread transmitter_6([&ws6]() {periodically_broadcast(std::ref(ws6), "7005");});
+    std::thread transmitter_7([&ws7]() {periodically_broadcast(std::ref(ws7), "7006");});
+    std::thread transmitter_8([&ws8]() {periodically_broadcast(std::ref(ws8), "7007");});
+    std::thread transmitter_9([&ws9]() {periodically_broadcast(std::ref(ws9), "7008");});
+    std::thread transmitter_10([&ws10]() {periodically_broadcast(std::ref(ws10), "7009");});
+    std::thread transmitter_11([&ws11]() {periodically_broadcast(std::ref(ws11), "7010");});
+    std::thread transmitter_12([&ws12]() {periodically_broadcast(std::ref(ws12), "7011");});
+    std::thread transmitter_13([&ws13]() {periodically_broadcast(std::ref(ws13), "7012");});
+    std::thread transmitter_14([&ws14]() {periodically_broadcast(std::ref(ws14), "7013");});
+    std::thread transmitter_15([&ws15]() {periodically_broadcast(std::ref(ws15), "7014");});
+    std::thread transmitter_16([&ws16]() {periodically_broadcast(std::ref(ws16), "7015");});
+    std::thread transmitter_17([&ws17]() {periodically_broadcast(std::ref(ws17), "7016");});
+    std::thread transmitter_18([&ws18]() {periodically_broadcast(std::ref(ws18), "7017");});
+    std::thread transmitter_19([&ws19]() {periodically_broadcast(std::ref(ws19), "7018");});
+    std::thread transmitter_20([&ws20]() {periodically_broadcast(std::ref(ws20), "7019");});
+    std::thread transmitter_21([&ws21]() {periodically_broadcast(std::ref(ws21), "7020");});
+    std::thread transmitter_22([&ws22]() {periodically_broadcast(std::ref(ws22), "7021");});
+    std::thread transmitter_23([&ws23]() {periodically_broadcast(std::ref(ws23), "7022");});
+    std::thread transmitter_24([&ws24]() {periodically_broadcast(std::ref(ws24), "7023");});
+    std::thread transmitter_25([&ws25]() {periodically_broadcast(std::ref(ws25), "7024");});
+    std::thread transmitter_26([&ws26]() {periodically_broadcast(std::ref(ws26), "7025");});
+    std::thread transmitter_27([&ws27]() {periodically_broadcast(std::ref(ws27), "7026");});
+    std::thread transmitter_28([&ws28]() {periodically_broadcast(std::ref(ws28), "7027");});
+    std::thread transmitter_29([&ws29]() {periodically_broadcast(std::ref(ws29), "7028");});
+    std::thread transmitter_30([&ws30]() {periodically_broadcast(std::ref(ws30), "7029");});
+    std::thread transmitter_31([&ws31]() {periodically_broadcast(std::ref(ws31), "7030");});
+    std::thread transmitter_32([&ws32]() {periodically_broadcast(std::ref(ws32), "7031");});
+    std::thread transmitter_33([&ws33]() {periodically_broadcast(std::ref(ws33), "7032");});
+    std::thread transmitter_34([&ws34]() {periodically_broadcast(std::ref(ws34), "7033");});
+    std::thread transmitter_35([&ws35]() {periodically_broadcast(std::ref(ws35), "7034");});
+    std::thread transmitter_36([&ws36]() {periodically_broadcast(std::ref(ws36), "7035");});
+    std::thread transmitter_37([&ws37]() {periodically_broadcast(std::ref(ws37), "7036");});
+    std::thread transmitter_38([&ws38]() {periodically_broadcast(std::ref(ws38), "7037");});
+    std::thread transmitter_39([&ws39]() {periodically_broadcast(std::ref(ws39), "7038");});
+    std::thread transmitter_40([&ws40]() {periodically_broadcast(std::ref(ws40), "7039");});
+    std::thread transmitter_41([&ws41]() {periodically_broadcast(std::ref(ws41), "7040");});
+    std::thread transmitter_42([&ws42]() {periodically_broadcast(std::ref(ws42), "7041");});
+    std::thread transmitter_43([&ws43]() {periodically_broadcast(std::ref(ws43), "7042");});
+    std::thread transmitter_44([&ws44]() {periodically_broadcast(std::ref(ws44), "7043");});
+    std::thread transmitter_45([&ws45]() {periodically_broadcast(std::ref(ws45), "7044");});
+    std::thread transmitter_46([&ws46]() {periodically_broadcast(std::ref(ws46), "7045");});
+    std::thread transmitter_47([&ws47]() {periodically_broadcast(std::ref(ws47), "7046");});
+    std::thread transmitter_48([&ws48]() {periodically_broadcast(std::ref(ws48), "7047");});
+    std::thread transmitter_49([&ws49]() {periodically_broadcast(std::ref(ws49), "7048");});
+    std::thread transmitter_50([&ws50]() {periodically_broadcast(std::ref(ws50), "7049");});
+    std::thread transmitter_51([&ws51]() {periodically_broadcast(std::ref(ws51), "7050");});
+    std::thread transmitter_52([&ws52]() {periodically_broadcast(std::ref(ws52), "7051");});
+    std::thread transmitter_53([&ws53]() {periodically_broadcast(std::ref(ws53), "7052");});
+    std::thread transmitter_54([&ws54]() {periodically_broadcast(std::ref(ws54), "7053");});
+    std::thread transmitter_55([&ws55]() {periodically_broadcast(std::ref(ws55), "7054");});
+    std::thread transmitter_56([&ws56]() {periodically_broadcast(std::ref(ws56), "7055");});
+    std::thread transmitter_57([&ws57]() {periodically_broadcast(std::ref(ws57), "7056");});
+    std::thread transmitter_58([&ws58]() {periodically_broadcast(std::ref(ws58), "7057");});
+    std::thread transmitter_59([&ws59]() {periodically_broadcast(std::ref(ws59), "7058");});
+    std::thread transmitter_60([&ws60]() {periodically_broadcast(std::ref(ws60), "7059");});
+    std::thread transmitter_61([&ws61]() {periodically_broadcast(std::ref(ws61), "7060");});
+    std::thread transmitter_62([&ws62]() {periodically_broadcast(std::ref(ws62), "7061");});
+    std::thread transmitter_63([&ws63]() {periodically_broadcast(std::ref(ws63), "7062");});
+    std::thread transmitter_64([&ws64]() {periodically_broadcast(std::ref(ws64), "7063");});
+    std::thread transmitter_65([&ws65]() {periodically_broadcast(std::ref(ws65), "7064");});
+    std::thread transmitter_66([&ws66]() {periodically_broadcast(std::ref(ws66), "7065");});
+    std::thread transmitter_67([&ws67]() {periodically_broadcast(std::ref(ws67), "7066");});
+    std::thread transmitter_68([&ws68]() {periodically_broadcast(std::ref(ws68), "7067");});
+    std::thread transmitter_69([&ws69]() {periodically_broadcast(std::ref(ws69), "7068");});
+    std::thread transmitter_70([&ws70]() {periodically_broadcast(std::ref(ws70), "7069");});
+    std::thread transmitter_71([&ws71]() {periodically_broadcast(std::ref(ws71), "7070");});
+    std::thread transmitter_72([&ws72]() {periodically_broadcast(std::ref(ws72), "7071");});
+    std::thread transmitter_73([&ws73]() {periodically_broadcast(std::ref(ws73), "7072");});
+    std::thread transmitter_74([&ws74]() {periodically_broadcast(std::ref(ws74), "7073");});
+    std::thread transmitter_75([&ws75]() {periodically_broadcast(std::ref(ws75), "7074");});
+    std::thread transmitter_76([&ws76]() {periodically_broadcast(std::ref(ws76), "7075");});
+    std::thread transmitter_77([&ws77]() {periodically_broadcast(std::ref(ws77), "7076");});
+    std::thread transmitter_78([&ws78]() {periodically_broadcast(std::ref(ws78), "7077");});
+    std::thread transmitter_79([&ws79]() {periodically_broadcast(std::ref(ws79), "7078");});
+    std::thread transmitter_80([&ws80]() {periodically_broadcast(std::ref(ws80), "7079");});
+    std::thread transmitter_81([&ws81]() {periodically_broadcast(std::ref(ws81), "7080");});
+    std::thread transmitter_82([&ws82]() {periodically_broadcast(std::ref(ws82), "7081");});
+    std::thread transmitter_83([&ws83]() {periodically_broadcast(std::ref(ws83), "7082");});
+    std::thread transmitter_84([&ws84]() {periodically_broadcast(std::ref(ws84), "7083");});
+    std::thread transmitter_85([&ws85]() {periodically_broadcast(std::ref(ws85), "7084");});
+    std::thread transmitter_86([&ws86]() {periodically_broadcast(std::ref(ws86), "7085");});
+    std::thread transmitter_87([&ws87]() {periodically_broadcast(std::ref(ws87), "7086");});
+    std::thread transmitter_88([&ws88]() {periodically_broadcast(std::ref(ws88), "7087");});
+    std::thread transmitter_89([&ws89]() {periodically_broadcast(std::ref(ws89), "7088");});
+    std::thread transmitter_90([&ws90]() {periodically_broadcast(std::ref(ws90), "7089");});
+    std::thread transmitter_91([&ws91]() {periodically_broadcast(std::ref(ws91), "7090");});
+    std::thread transmitter_92([&ws92]() {periodically_broadcast(std::ref(ws92), "7091");});
+    std::thread transmitter_93([&ws93]() {periodically_broadcast(std::ref(ws93), "7092");});
+    std::thread transmitter_94([&ws94]() {periodically_broadcast(std::ref(ws94), "7093");});
+    std::thread transmitter_95([&ws95]() {periodically_broadcast(std::ref(ws95), "7094");});
+    std::thread transmitter_96([&ws96]() {periodically_broadcast(std::ref(ws96), "7095");});
+    std::thread transmitter_97([&ws97]() {periodically_broadcast(std::ref(ws97), "7096");});
+    std::thread transmitter_98([&ws98]() {periodically_broadcast(std::ref(ws98), "7097");});
+    std::thread transmitter_99([&ws99]() {periodically_broadcast(std::ref(ws99), "7098");});
+    std::thread transmitter_100([&ws100]() {periodically_broadcast(std::ref(ws100), "7099");});
 
     ws_thread_1.join();        
     ws_thread_2.join();        
