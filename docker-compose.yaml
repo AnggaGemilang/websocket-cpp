@@ -1,0 +1,18 @@
+networks:
+  default:
+    name: cms_network
+    external: true
+
+services:
+  1-n-grouping-ws:
+    privileged: true
+    restart: always
+    build:
+      context: .
+    container_name: 1-n-grouping-ws
+    ports:
+      - "5000:5000"
+    volumes:
+      - "/dev:/dev"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"    
