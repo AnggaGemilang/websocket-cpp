@@ -8,9 +8,16 @@ struct PerSocketData {
     uint8_t port;
 };
 
+uint16_t generate_random_value() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(1, 65534);
+    return static_cast<uint16_t>(distrib(gen));
+}
+
 class WebSocketServer {
 public:
-    explicit WebSocketServer(const uint16_t& port, const std::string& url) : port_(port), url_(url) {}
+    explicit WebSocketServer(const uint16_t& port, const std::string_view& url) : port_(port), url_(url) {}
 
     bool& get_is_ready_() {
         return this->is_ready_;
@@ -78,13 +85,6 @@ private:
 
     std::unordered_set<uWS::WebSocket<false, true, PerSocketData>*> connections_;
 };
-
-uint16_t generate_random_value() {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(1, 65534);
-    return static_cast<uint16_t>(distrib(gen));
-}
 
 [[noreturn]] void periodically_broadcast(WebSocketServer& ws, const std::string& message) {
     while (true) {
