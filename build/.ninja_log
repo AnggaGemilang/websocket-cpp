@@ -1,0 +1,5 @@
+# ninja log v5
+2	8601	1738056997844063561	CMakeFiles/segmented-ws-by-url.dir/src/app.cpp.o	b646fd1b722cff34
+8602	8815	1738056998074107041	segmented-ws-by-url	ba40574e132789f7
+3	6891	1738224680427045941	CMakeFiles/segmented-ws-by-url.dir/src/app.cpp.o	b646fd1b722cff34
+6891	7111	1738224680661042954	segmented-ws-by-url	ba40574e132789f7
