@@ -8,6 +8,13 @@ struct PerSocketData {
     std::string endpoint_name;
 };
 
+uint16_t generate_random_value() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(1, 65534);
+    return static_cast<uint16_t>(distrib(gen));
+}
+
 class WebSocketServer {
 public:
     explicit WebSocketServer(const uint16_t &port) : port_(port) {}
@@ -182,18 +189,11 @@ private:
     uWS::Loop* loop_;
 };
 
-uint16_t generate_random_value() {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib(1, 65534);
-    return static_cast<uint16_t>(distrib(gen));
-}
-
-[[noreturn]] void periodically_broadcast(WebSocketServer* ws, const std::string_view& endpoint) {
+[[noreturn]] void periodically_broadcast(WebSocketServer& ws, const std::string_view& endpoint) {
     while (true) {
-        if (ws->get_is_ready_()) {
-            ws->get_loop_()->defer([&ws, endpoint] () {
-                ws->broadcast_message("broadcast" + std::string(endpoint), "message from " + std::string(endpoint) + " (" + std::to_string(generate_random_value()) + ")");
+        if (ws.get_is_ready_()) {
+            ws.get_loop_()->defer([&ws, endpoint] () {
+                ws.broadcast_message("broadcast" + std::string(endpoint), "message from " + std::string(endpoint) + " (" + std::to_string(generate_random_value()) + ")");
             });
             std::this_thread::sleep_for(std::chrono::milliseconds(200));    
         }
@@ -210,106 +210,106 @@ int main() {
 
     std::this_thread::sleep_for(std::chrono::milliseconds(300));
 
-    std::thread transmitter_1([&ws]() {periodically_broadcast(&ws, "/endpoint1");});
-    std::thread transmitter_2([&ws]() {periodically_broadcast(&ws, "/endpoint2");});
-    std::thread transmitter_3([&ws]() {periodically_broadcast(&ws, "/endpoint3");});
-    std::thread transmitter_4([&ws]() {periodically_broadcast(&ws, "/endpoint4");});
-    std::thread transmitter_5([&ws]() {periodically_broadcast(&ws, "/endpoint5");});
-    std::thread transmitter_6([&ws]() {periodically_broadcast(&ws, "/endpoint6");});
-    std::thread transmitter_7([&ws]() {periodically_broadcast(&ws, "/endpoint7");});
-    std::thread transmitter_8([&ws]() {periodically_broadcast(&ws, "/endpoint8");});
-    std::thread transmitter_9([&ws]() {periodically_broadcast(&ws, "/endpoint9");});
-    std::thread transmitter_10([&ws]() {periodically_broadcast(&ws, "/endpoint10");});
-    std::thread transmitter_11([&ws]() {periodically_broadcast(&ws, "/endpoint11");});
-    std::thread transmitter_12([&ws]() {periodically_broadcast(&ws, "/endpoint12");});  
-    std::thread transmitter_13([&ws]() {periodically_broadcast(&ws, "/endpoint13");});
-    std::thread transmitter_14([&ws]() {periodically_broadcast(&ws, "/endpoint14");});
-    std::thread transmitter_15([&ws]() {periodically_broadcast(&ws, "/endpoint15");});
-    std::thread transmitter_16([&ws]() {periodically_broadcast(&ws, "/endpoint16");});
-    std::thread transmitter_17([&ws]() {periodically_broadcast(&ws, "/endpoint17");});
-    std::thread transmitter_18([&ws]() {periodically_broadcast(&ws, "/endpoint18");});
-    std::thread transmitter_19([&ws]() {periodically_broadcast(&ws, "/endpoint19");});
-    std::thread transmitter_20([&ws]() {periodically_broadcast(&ws, "/endpoint20");});
-    std::thread transmitter_21([&ws]() {periodically_broadcast(&ws, "/endpoint21");});
-    std::thread transmitter_22([&ws]() {periodically_broadcast(&ws, "/endpoint22");});
-    std::thread transmitter_23([&ws]() {periodically_broadcast(&ws, "/endpoint23");});
-    std::thread transmitter_24([&ws]() {periodically_broadcast(&ws, "/endpoint24");});
-    std::thread transmitter_25([&ws]() {periodically_broadcast(&ws, "/endpoint25");});
-    std::thread transmitter_26([&ws]() {periodically_broadcast(&ws, "/endpoint26");});
-    std::thread transmitter_27([&ws]() {periodically_broadcast(&ws, "/endpoint27");});
-    std::thread transmitter_28([&ws]() {periodically_broadcast(&ws, "/endpoint28");});
-    std::thread transmitter_29([&ws]() {periodically_broadcast(&ws, "/endpoint29");});
-    std::thread transmitter_30([&ws]() {periodically_broadcast(&ws, "/endpoint30");});
-    std::thread transmitter_31([&ws]() {periodically_broadcast(&ws, "/endpoint31");});
-    std::thread transmitter_32([&ws]() {periodically_broadcast(&ws, "/endpoint32");});
-    std::thread transmitter_33([&ws]() {periodically_broadcast(&ws, "/endpoint33");});
-    std::thread transmitter_34([&ws]() {periodically_broadcast(&ws, "/endpoint34");});
-    std::thread transmitter_35([&ws]() {periodically_broadcast(&ws, "/endpoint35");});
-    std::thread transmitter_36([&ws]() {periodically_broadcast(&ws, "/endpoint36");});
-    std::thread transmitter_37([&ws]() {periodically_broadcast(&ws, "/endpoint37");});
-    std::thread transmitter_38([&ws]() {periodically_broadcast(&ws, "/endpoint38");});
-    std::thread transmitter_39([&ws]() {periodically_broadcast(&ws, "/endpoint39");});
-    std::thread transmitter_40([&ws]() {periodically_broadcast(&ws, "/endpoint40");});
-    std::thread transmitter_41([&ws]() {periodically_broadcast(&ws, "/endpoint41");});
-    std::thread transmitter_42([&ws]() {periodically_broadcast(&ws, "/endpoint42");});
-    std::thread transmitter_43([&ws]() {periodically_broadcast(&ws, "/endpoint43");});
-    std::thread transmitter_44([&ws]() {periodically_broadcast(&ws, "/endpoint44");});
-    std::thread transmitter_45([&ws]() {periodically_broadcast(&ws, "/endpoint45");});
-    std::thread transmitter_46([&ws]() {periodically_broadcast(&ws, "/endpoint46");});
-    std::thread transmitter_47([&ws]() {periodically_broadcast(&ws, "/endpoint47");});
-    std::thread transmitter_48([&ws]() {periodically_broadcast(&ws, "/endpoint48");});
-    std::thread transmitter_49([&ws]() {periodically_broadcast(&ws, "/endpoint49");});
-    std::thread transmitter_50([&ws]() {periodically_broadcast(&ws, "/endpoint50");});
-    std::thread transmitter_51([&ws]() {periodically_broadcast(&ws, "/endpoint51");});
-    std::thread transmitter_52([&ws]() {periodically_broadcast(&ws, "/endpoint52");});
-    std::thread transmitter_53([&ws]() {periodically_broadcast(&ws, "/endpoint53");});
-    std::thread transmitter_54([&ws]() {periodically_broadcast(&ws, "/endpoint54");});
-    std::thread transmitter_55([&ws]() {periodically_broadcast(&ws, "/endpoint55");});
-    std::thread transmitter_56([&ws]() {periodically_broadcast(&ws, "/endpoint56");});
-    std::thread transmitter_57([&ws]() {periodically_broadcast(&ws, "/endpoint57");});
-    std::thread transmitter_58([&ws]() {periodically_broadcast(&ws, "/endpoint58");});
-    std::thread transmitter_59([&ws]() {periodically_broadcast(&ws, "/endpoint59");});
-    std::thread transmitter_60([&ws]() {periodically_broadcast(&ws, "/endpoint60");});
-    std::thread transmitter_61([&ws]() {periodically_broadcast(&ws, "/endpoint61");});
-    std::thread transmitter_62([&ws]() {periodically_broadcast(&ws, "/endpoint62");});
-    std::thread transmitter_63([&ws]() {periodically_broadcast(&ws, "/endpoint63");});
-    std::thread transmitter_64([&ws]() {periodically_broadcast(&ws, "/endpoint64");});
-    std::thread transmitter_65([&ws]() {periodically_broadcast(&ws, "/endpoint65");});
-    std::thread transmitter_66([&ws]() {periodically_broadcast(&ws, "/endpoint66");});
-    std::thread transmitter_67([&ws]() {periodically_broadcast(&ws, "/endpoint67");});
-    std::thread transmitter_68([&ws]() {periodically_broadcast(&ws, "/endpoint68");});
-    std::thread transmitter_69([&ws]() {periodically_broadcast(&ws, "/endpoint69");});
-    std::thread transmitter_70([&ws]() {periodically_broadcast(&ws, "/endpoint70");});
-    std::thread transmitter_71([&ws]() {periodically_broadcast(&ws, "/endpoint71");});
-    std::thread transmitter_72([&ws]() {periodically_broadcast(&ws, "/endpoint72");});
-    std::thread transmitter_73([&ws]() {periodically_broadcast(&ws, "/endpoint73");});
-    std::thread transmitter_74([&ws]() {periodically_broadcast(&ws, "/endpoint74");});
-    std::thread transmitter_75([&ws]() {periodically_broadcast(&ws, "/endpoint75");});
-    std::thread transmitter_76([&ws]() {periodically_broadcast(&ws, "/endpoint76");});
-    std::thread transmitter_77([&ws]() {periodically_broadcast(&ws, "/endpoint77");});
-    std::thread transmitter_78([&ws]() {periodically_broadcast(&ws, "/endpoint78");});
-    std::thread transmitter_79([&ws]() {periodically_broadcast(&ws, "/endpoint79");});
-    std::thread transmitter_80([&ws]() {periodically_broadcast(&ws, "/endpoint80");});
-    std::thread transmitter_81([&ws]() {periodically_broadcast(&ws, "/endpoint81");});
-    std::thread transmitter_82([&ws]() {periodically_broadcast(&ws, "/endpoint82");});
-    std::thread transmitter_83([&ws]() {periodically_broadcast(&ws, "/endpoint83");});
-    std::thread transmitter_84([&ws]() {periodically_broadcast(&ws, "/endpoint84");});
-    std::thread transmitter_85([&ws]() {periodically_broadcast(&ws, "/endpoint85");});
-    std::thread transmitter_86([&ws]() {periodically_broadcast(&ws, "/endpoint86");});
-    std::thread transmitter_87([&ws]() {periodically_broadcast(&ws, "/endpoint87");});
-    std::thread transmitter_88([&ws]() {periodically_broadcast(&ws, "/endpoint88");});
-    std::thread transmitter_89([&ws]() {periodically_broadcast(&ws, "/endpoint89");});
-    std::thread transmitter_90([&ws]() {periodically_broadcast(&ws, "/endpoint90");});
-    std::thread transmitter_91([&ws]() {periodically_broadcast(&ws, "/endpoint91");});
-    std::thread transmitter_92([&ws]() {periodically_broadcast(&ws, "/endpoint92");});
-    std::thread transmitter_93([&ws]() {periodically_broadcast(&ws, "/endpoint93");});
-    std::thread transmitter_94([&ws]() {periodically_broadcast(&ws, "/endpoint94");});
-    std::thread transmitter_95([&ws]() {periodically_broadcast(&ws, "/endpoint95");});
-    std::thread transmitter_96([&ws]() {periodically_broadcast(&ws, "/endpoint96");});
-    std::thread transmitter_97([&ws]() {periodically_broadcast(&ws, "/endpoint97");});
-    std::thread transmitter_98([&ws]() {periodically_broadcast(&ws, "/endpoint98");});
-    std::thread transmitter_99([&ws]() {periodically_broadcast(&ws, "/endpoint99");});
-    std::thread transmitter_100([&ws]() {periodically_broadcast(&ws, "/endpoint100");});
+    std::thread transmitter_1([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint1");});
+    std::thread transmitter_2([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint2");});
+    std::thread transmitter_3([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint3");});
+    std::thread transmitter_4([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint4");});
+    std::thread transmitter_5([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint5");});
+    std::thread transmitter_6([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint6");});
+    std::thread transmitter_7([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint7");});
+    std::thread transmitter_8([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint8");});
+    std::thread transmitter_9([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint9");});
+    std::thread transmitter_10([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint10");});
+    std::thread transmitter_11([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint11");});
+    std::thread transmitter_12([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint12");});  
+    std::thread transmitter_13([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint13");});
+    std::thread transmitter_14([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint14");});
+    std::thread transmitter_15([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint15");});
+    std::thread transmitter_16([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint16");});
+    std::thread transmitter_17([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint17");});
+    std::thread transmitter_18([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint18");});
+    std::thread transmitter_19([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint19");});
+    std::thread transmitter_20([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint20");});
+    std::thread transmitter_21([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint21");});
+    std::thread transmitter_22([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint22");});
+    std::thread transmitter_23([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint23");});
+    std::thread transmitter_24([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint24");});
+    std::thread transmitter_25([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint25");});
+    std::thread transmitter_26([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint26");});
+    std::thread transmitter_27([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint27");});
+    std::thread transmitter_28([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint28");});
+    std::thread transmitter_29([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint29");});
+    std::thread transmitter_30([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint30");});
+    std::thread transmitter_31([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint31");});
+    std::thread transmitter_32([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint32");});
+    std::thread transmitter_33([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint33");});
+    std::thread transmitter_34([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint34");});
+    std::thread transmitter_35([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint35");});
+    std::thread transmitter_36([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint36");});
+    std::thread transmitter_37([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint37");});
+    std::thread transmitter_38([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint38");});
+    std::thread transmitter_39([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint39");});
+    std::thread transmitter_40([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint40");});
+    std::thread transmitter_41([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint41");});
+    std::thread transmitter_42([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint42");});
+    std::thread transmitter_43([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint43");});
+    std::thread transmitter_44([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint44");});
+    std::thread transmitter_45([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint45");});
+    std::thread transmitter_46([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint46");});
+    std::thread transmitter_47([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint47");});
+    std::thread transmitter_48([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint48");});
+    std::thread transmitter_49([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint49");});
+    std::thread transmitter_50([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint50");});
+    std::thread transmitter_51([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint51");});
+    std::thread transmitter_52([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint52");});
+    std::thread transmitter_53([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint53");});
+    std::thread transmitter_54([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint54");});
+    std::thread transmitter_55([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint55");});
+    std::thread transmitter_56([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint56");});
+    std::thread transmitter_57([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint57");});
+    std::thread transmitter_58([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint58");});
+    std::thread transmitter_59([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint59");});
+    std::thread transmitter_60([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint60");});
+    std::thread transmitter_61([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint61");});
+    std::thread transmitter_62([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint62");});
+    std::thread transmitter_63([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint63");});
+    std::thread transmitter_64([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint64");});
+    std::thread transmitter_65([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint65");});
+    std::thread transmitter_66([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint66");});
+    std::thread transmitter_67([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint67");});
+    std::thread transmitter_68([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint68");});
+    std::thread transmitter_69([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint69");});
+    std::thread transmitter_70([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint70");});
+    std::thread transmitter_71([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint71");});
+    std::thread transmitter_72([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint72");});
+    std::thread transmitter_73([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint73");});
+    std::thread transmitter_74([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint74");});
+    std::thread transmitter_75([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint75");});
+    std::thread transmitter_76([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint76");});
+    std::thread transmitter_77([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint77");});
+    std::thread transmitter_78([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint78");});
+    std::thread transmitter_79([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint79");});
+    std::thread transmitter_80([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint80");});
+    std::thread transmitter_81([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint81");});
+    std::thread transmitter_82([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint82");});
+    std::thread transmitter_83([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint83");});
+    std::thread transmitter_84([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint84");});
+    std::thread transmitter_85([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint85");});
+    std::thread transmitter_86([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint86");});
+    std::thread transmitter_87([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint87");});
+    std::thread transmitter_88([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint88");});
+    std::thread transmitter_89([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint89");});
+    std::thread transmitter_90([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint90");});
+    std::thread transmitter_91([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint91");});
+    std::thread transmitter_92([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint92");});
+    std::thread transmitter_93([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint93");});
+    std::thread transmitter_94([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint94");});
+    std::thread transmitter_95([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint95");});
+    std::thread transmitter_96([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint96");});
+    std::thread transmitter_97([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint97");});
+    std::thread transmitter_98([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint98");});
+    std::thread transmitter_99([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint99");});
+    std::thread transmitter_100([&ws]() {periodically_broadcast(std::ref(ws), "/endpoint100");});
 
     ws_thread.join();
 
