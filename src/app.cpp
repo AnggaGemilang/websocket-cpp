@@ -10,9 +10,7 @@ struct PerSocketData {
 
 class WebSocketServer {
 public:
-    explicit WebSocketServer(const uint16_t &port) : port_(port) {
-        app_ = std::make_shared<uWS::App>();
-    }
+    explicit WebSocketServer(const uint16_t &port) : port_(port) {}
 
     bool& get_is_ready_() {
         return this->is_ready_;
@@ -47,7 +45,7 @@ public:
     }
 
     void init() {
-        app_ = std::make_shared<uWS::App>();
+        this->app_ = std::make_shared<uWS::App>();
 
         this->add_endpoint("/endpoint1");
         this->add_endpoint("/endpoint2");
@@ -156,8 +154,8 @@ public:
                 this->is_ready_ = true;
             }
         });
-
-        this->loop_ = uWS::Loop::get();
+    
+        this->loop_ = uWS::Loop::get();    
     }
 
     void start() const {
@@ -176,7 +174,6 @@ public:
     {
         this->app_->publish(broadcast, data, uWS::OpCode::TEXT, false);
     }
-
 private:
     bool is_ready_ = false;
 
