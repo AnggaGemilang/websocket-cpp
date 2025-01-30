@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/home/angga/Documents/LEN/eksplor/1-1-ws/build",
-  "command": "/usr/bin/g++ -DBOOST_ATOMIC_NO_LIB -DBOOST_ATOMIC_STATIC_LINK -DBOOST_CHRONO_NO_LIB -DBOOST_CHRONO_STATIC_LINK -DBOOST_CONTAINER_NO_LIB -DBOOST_CONTAINER_STATIC_LINK -DBOOST_DATE_TIME_NO_LIB -DBOOST_DATE_TIME_STATIC_LINK -DBOOST_THREAD_NO_LIB -DBOOST_THREAD_STATIC_LINK -DBOOST_THREAD_USE_LIB -isystem /opt/vcpkg/installed/x64-linux/include -g -o CMakeFiles/segmented-ws-by-url.dir/src/app.cpp.o -c /home/angga/Documents/LEN/eksplor/1-1-ws/src/app.cpp",
-  "file": "/home/angga/Documents/LEN/eksplor/1-1-ws/src/app.cpp",
-  "output": "CMakeFiles/segmented-ws-by-url.dir/src/app.cpp.o"
-}
-]

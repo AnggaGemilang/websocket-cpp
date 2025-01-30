@@ -4,12 +4,12 @@
 #include <uwebsockets/App.h>
 #include <random>
 
+struct PerSocketData {
+    uint8_t port;
+};
+
 class WebSocketServer {
 public:
-    struct PerSocketData {
-        uint8_t port;
-    };
-
     explicit WebSocketServer(const uint16_t& port, const std::string& url) : port_(port), url_(url) {}
 
     bool& get_is_ready_() {
