@@ -3,9 +3,7 @@
 #include <thread>
 #include <random>
 
-struct PerSocketData {
-    std::string endpoint_name;
-};
+struct PerSocketData {};
 
 uint16_t generate_random_value() {
     std::random_device rd;
@@ -39,7 +37,6 @@ public:
             .sendPingsAutomatically = true,
             .upgrade = nullptr,
             .open = [this](auto* ws) {
-                ws->getUserData()->endpoint_name = this->url_;
                 ws->subscribe("broadcast-data");
 
                 std::cout << "Connected to " << this->url_ << "\n";
@@ -47,7 +44,7 @@ public:
             .close = [this](auto* ws, int code, std::string_view message) {
                 ws->unsubscribe("broadcast-data");
 
-                std::cout << "Disconnected from " << this->url_ << " (err code: " << code << ") \n";
+                std::cout << "Disconnected from " << this->url_ << " (" << message << ", err code: " << code << ") \n";
             }
         });
 
