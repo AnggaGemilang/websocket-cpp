@@ -3,9 +3,7 @@
 #include <thread>
 #include <random>
 
-struct PerSocketData {
-    std::string endpoint_name;
-};
+struct PerSocketData {};
 
 uint16_t generate_random_value() {
     std::random_device rd;
@@ -37,7 +35,6 @@ public:
             .sendPingsAutomatically = true,
             .upgrade = nullptr,
             .open = [this, endpoint](auto* ws) {
-                ws->getUserData()->endpoint_name = endpoint;
                 ws->subscribe("broadcast" + endpoint);
 
                 std::cout << "Connected to " << endpoint << "\n";
@@ -45,7 +42,7 @@ public:
             .close = [endpoint](auto* ws, int code, std::string_view message) {
                 ws->unsubscribe("broadcast" + endpoint);
                 
-                std::cout << "Disconnected from " << endpoint << " (" << message << ",err code: " << code << ") \n";
+                std::cout << "Disconnected from " << endpoint << " (" << message << ", err code: " << code << ") \n";
             }
         });
     }
@@ -192,7 +189,7 @@ private:
     while (true) {
         if (ws.get_is_ready_()) {
             ws.get_loop_()->defer([&ws, endpoint] () {
-                ws.broadcast_message("broadcast" + std::string(endpoint), "message from " + std::string(endpoint) + " (" + std::to_string(generate_random_value()) + ")");
+                ws.broadcast_message("broadcast" + std::string(endpoint), "message from endpoint " + std::string(endpoint) + " (" + std::to_string(generate_random_value()) + ")");
             });
             std::this_thread::sleep_for(std::chrono::milliseconds(200));    
         }
