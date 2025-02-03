@@ -42,10 +42,10 @@ public:
 
                 std::cout << "Connected to " << endpoint << std::endl;
             },
-            .close = [this, endpoint]([[maybe_unused]] auto* ws, int, std::string_view) {
+            .close = [this, endpoint]([[maybe_unused]] auto* ws, int code, std::string_view message) {
                 websockets_->erase(endpoint);
 
-                std::cout << "Disconnected from " << endpoint << std::endl;
+                std::cout << "Disconnected from " << endpoint << " (" << message << ", err code: " << code << ") \n";
             }
         });
     }
