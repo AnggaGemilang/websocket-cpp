@@ -4,9 +4,7 @@
 #include <unordered_map>
 #include <random>
 
-struct PerSocketData {
-    std::string endpoint_name;
-};
+struct PerSocketData {};
 
 uint16_t generate_random_value() {
     std::random_device rd;
@@ -40,13 +38,13 @@ public:
             .sendPingsAutomatically = true,
             .upgrade = nullptr,
             .open = [this, endpoint](auto* ws) {
-                ws->getUserData()->endpoint_name = endpoint;
                 (*this->websockets_)[endpoint].insert(ws);
 
                 std::cout << "Connected to " << endpoint << std::endl;
             },
-            .close = [this, endpoint](auto* ws, int, std::string_view) {
+            .close = [this, endpoint]([[maybe_unused]] auto* ws, int, std::string_view) {
                 websockets_->erase(endpoint);
+
                 std::cout << "Disconnected from " << endpoint << std::endl;
             }
         });
@@ -195,6 +193,7 @@ private:
             ws.get_loop_()->defer([&ws, endpoint] () {
                 ws.broadcast_message(std::string(endpoint), "message from endpoint " + std::string(endpoint) + " (" + std::to_string(generate_random_value()) + ")");
             });
+            
             std::this_thread::sleep_for(std::chrono::milliseconds(200));
         }
     }
