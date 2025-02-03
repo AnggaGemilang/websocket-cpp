@@ -194,7 +194,7 @@ private:
                 ws.broadcast_message(std::string(endpoint), "message from endpoint " + std::string(endpoint) + " (" + std::to_string(generate_random_value()) + ")");
             });
             
-            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
     }
 }
