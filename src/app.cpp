@@ -90,7 +90,7 @@ private:
             ws.get_loop_()->defer([&ws, port] () {
                 ws.broadcast_message("broadcast-data", "message from port " + std::string(port) + " (" + std::to_string(generate_random_value()) + ")");
             });
-            std::this_thread::sleep_for(std::chrono::milliseconds(200));            
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));            
         }
     }
 }
