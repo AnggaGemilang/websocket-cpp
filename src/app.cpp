@@ -4,9 +4,7 @@
 #include <uwebsockets/App.h>
 #include <random>
 
-struct PerSocketData {
-    uint8_t port;
-};
+struct PerSocketData {};
 
 uint16_t generate_random_value() {
     std::random_device rd;
@@ -72,7 +70,6 @@ public:
         for (auto* ws : connections_) {
             ws->send(data, uWS::OpCode::TEXT);
         }
-        std::cout << "Broadcasted message: " << data << " to all connections.\n";
     }
 
 private:
